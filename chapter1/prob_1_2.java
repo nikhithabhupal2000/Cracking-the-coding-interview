@@ -53,7 +53,10 @@ public class prob_1_2{
 				return false;
 			}
 		}
-		return true;
+		if(freq.size() == 0){
+			return true;
+		}
+		return false;
 	}
 
 }

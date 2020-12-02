@@ -1,6 +1,6 @@
 import java.io.*;
 import java.util.*;
-public class prob_4_1{
+public class prob_4_7_change{
 	public static void main(String[] args){
 		Scanner ip = new Scanner(System.in);
 		System.out.println("Enter the number of vertices");
@@ -8,18 +8,18 @@ public class prob_4_1{
 		System.out.println("Enter the number of edges");
 		int edges = ip.nextInt();
 		Graph g = new Graph(vertices, edges);
-		System.out.println("Enter the source and destination");
-		int source = ip.nextInt();
-		int destination = ip.nextInt();
-		System.out.println(g.isReachable(source, destination));
+		ArrayList<Integer> order = new ArrayList<>();
+		g.getOrdering(order);
+		System.out.println(order);
 	}
+
 }
 
 class Graph{
 	int vertices;
 	int edges;
 	ArrayList<ArrayList<Integer>> adjList;
-	public Graph(int vertices, int edges){
+	Graph(int vertices, int edges){
 		this.vertices = vertices;
 		this.edges = edges;
 		adjList = new ArrayList<>();
@@ -30,33 +30,38 @@ class Graph{
 		readEdges();
 	}
 
-	private void readEdges(){
+	public void getOrdering(ArrayList<Integer> order){
+		int[] visited = new int[vertices];
+		Arrays.fill(visited, -1);
+		for(int i = 0; i < vertices; i ++){
+			if(visited[i] == -1){
+				explore(i, visited, order);
+			}
+		}
+	}
+
+	public void explore(int val, int[] visited, ArrayList<Integer> order){
+		visited[val] = 1;
+		for(int a : adjList.get(val)){
+			if(visited[a] == -1){
+				explore(a, visited, order);
+			}
+		}
+		order.add(0, val);
+	}
+
+	public void readEdges(){
 		Scanner ip = new Scanner(System.in);
 		for(int i = 0; i < this.edges; i ++){
 			System.out.println("Enter the edge");
 			int u = ip.nextInt();
 			int v = ip.nextInt();
-			this.addEdge(u, v);
+			addEdge(u, v);
 		}
 	}
 
-	private void addEdge(int a, int b){
-		adjList.get(a).add(b);
+	public void addEdge(int u, int v){
+		this.adjList.get(u).add(v);
 	}
 
-	public boolean isReachable(int source, int destination){
-		int[] visited = new int[this.vertices];
-		explore(visited, source);
-		return visited[destination] == 1;
-	}
-
-	public void explore(int[] visited, int source){
-		visited[source] = 1;
-		for(int a : this.adjList.get(source)){
-			if(visited[a] == 0){
-				explore(a);
-			}
-		}
-	}
 }
-

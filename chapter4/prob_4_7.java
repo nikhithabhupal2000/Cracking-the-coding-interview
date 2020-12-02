@@ -9,11 +9,12 @@ public class prob_4_7{
 		ip.nextLine();
 		char[] projects = new char[vertices];
 		for(int i = 0; i < vertices; i ++){
+			System.out.println("Enter the project name");
 			projects[i] = ip.nextLine().charAt(0);
 		}
 		Graph g = new Graph(vertices, edges, projects);
 		ArrayList<Character> order = new ArrayList<>();
-		g.getOrdering('a', order);
+		g.getOrdering(order);
 		System.out.println(order);
 	}
 }
@@ -32,7 +33,7 @@ class Graph{
 		readDependencies();
 	}
 
-	public void getOrdering(char start, ArrayList<Character> order){
+	public void getOrdering(ArrayList<Character> order){
 		HashSet<Character> visited = new HashSet<>();
 		for(Map.Entry<Character, ArrayList<Character>> e : adjList.entrySet()){
 			if(!visited.contains(e.getKey())){
@@ -45,7 +46,7 @@ class Graph{
 		visited.add(val);
 		for(Character c : adjList.get(val)){
 			if(!visited.contains(c)){
-				explore(val, order, visited);
+				explore(c, order, visited);
 			}
 		}
 		order.add(0, val);
